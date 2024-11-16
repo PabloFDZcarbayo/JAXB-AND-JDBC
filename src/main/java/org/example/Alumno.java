@@ -10,6 +10,13 @@ public class Alumno {
     private String curso;
     private String dni;
 
+    public Alumno(String nombre, String apellido, String curso, String dni) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.curso = curso;
+        this.dni = dni;
+    }
+
     public Alumno() {
     }
 
