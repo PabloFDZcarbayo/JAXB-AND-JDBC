@@ -5,13 +5,13 @@
         <nombre>Jose</nombre>
         <apellido>Perez</apellido>
         <curso>DAM</curso>
-        <dni>13990429L</dni>
+        <dni>13990456L</dni>
     </alumno>
     <alumno>
         <nombre>Maria</nombre>
         <apellido>Garcia</apellido>
         <curso>DAM</curso>
-        <dni>12345678P</dni>
+        <dni>12345928P</dni>
     </alumno>
     <alumno>
         <nombre>Manuel</nombre>

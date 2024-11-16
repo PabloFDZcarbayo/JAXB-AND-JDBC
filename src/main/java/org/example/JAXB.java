@@ -9,7 +9,7 @@ public class JAXB {
 
     private static String FILE_PATH = "src/main/java/Archivos XML/Alumnos.xml";
 
-    public static void readXML() {
+    public static void readXML(AlumnoDAO alumnoDAO) {
         File data = new File(FILE_PATH);
         try {
             //Crear el contexto y leer el XML
@@ -18,7 +18,7 @@ public class JAXB {
             Alumnos alumnos = (Alumnos) unmarshaller.unmarshal(data);
 
             for (Alumno alumno : alumnos.getAlumnos()) {
-                AlumnoDAO.InsertData(alumno);
+                alumnoDAO.InsertData(alumno);
             }
         } catch (Exception e){
             e.printStackTrace();

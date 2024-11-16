@@ -1,13 +1,18 @@
 package org.example;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AlumnoDAO {
 
-    private static final Connection connection = ConnectDB.getConnection();
+    private static Connection connection;
 
+    public AlumnoDAO(){
+        connection = ConnectDB.getConnection();
+    }
 
-    public static void InsertData(Alumno alumno) {
+    public void InsertData(Alumno alumno) {
         String sqlQuery = "INSERT INTO Alumnos (nombre, apellido, curso, dni) VALUES (?, ?, ?, ?)";
         try {
             assert connection != null;
@@ -16,34 +21,47 @@ public class AlumnoDAO {
             pStatement.setString(2, alumno.getApellido());
             pStatement.setString(3, alumno.getCurso());
             pStatement.setString(4, alumno.getDni());
-            ResultSet rs = pStatement.executeQuery();
+            pStatement.executeUpdate();
 
-        } catch (SQLIntegrityConstraintViolationException e) {
-            System.out.println("DNI repetido");
 
-        } catch (Exception e) {
-            System.out.println("Error de insercion: "+ e.getMessage());
+        } catch (SQLException e) {
+            String check = "SELECT dni FROM Alumnos WHERE dni = ?";
+            try {
+                PreparedStatement pStatement = connection.prepareStatement(check);
+                pStatement.setString(1, alumno.getDni());
+                ResultSet rs = pStatement.executeQuery();
+                if (rs.next()) {
+                    System.out.println("Error de insercion -> DNI repetido: "+alumno.getDni());
+                }
+
+            } catch  (SQLException ex) {;
+                System.out.println("Error de insercion no identificado");
+            }
+
 
         }
     }
-
-    public static void ReadData() {
+    public  List<Alumno> ReadData() {
         String sqlQuery = "SELECT * FROM Alumnos;";
+            List<Alumno> alumnos = new ArrayList<Alumno>();
         try {
             assert connection != null;
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(sqlQuery);
             while (rs.next()) {
-                System.out.println("Nombre: " + rs.getString("nombre"));
-                System.out.println("Apellido: " + rs.getString("apellido"));
-                System.out.println("Curso: " + rs.getString("curso"));
-                System.out.println("DNI: " + rs.getString("dni"));
-                System.out.println("-------------");
-                System.out.println();
+                Alumno alumno = new Alumno ();
+                alumno.setNombre(rs.getString("nombre"));
+                alumno.setApellido(rs.getString("apellido"));
+                alumno.setCurso(rs.getString("curso"));
+                alumno.setDni(rs.getString("dni"));
+                alumnos.add(alumno);
+
             }
         } catch (Exception e) {
             System.out.println("Error de lectura");
 
         }
+        return alumnos;
     }
 }
+
